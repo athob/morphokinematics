@@ -1,7 +1,5 @@
 import numpy as np
-from scipy import stats,signal,interpolate,special,ndimage,spatial,linalg
-import multiprocessing as MP
-
+from scipy import interpolate,linalg
 
 
 def cumsummedian(a,weights=None):
@@ -214,7 +212,7 @@ def morphological_diagnostics(XYZ,mass,Vxyz,aperture=0.03,CoMvelocity=True,reduc
     smomentums = np.cross(particlesall[:,:3],particlesall[:,4:7])
     momentum = np.sum(particles[:,3][:,np.newaxis]*smomentums[extract],axis=0)
     # Compute morphological diagnostics
-    s = 1; q = 1; Rsphall = 1+reduced_structure*(distancesall-1); stop = False; counter = 0
+    s = 1; q = 1; Rsphall = 1+reduced_structure*(distancesall-1); stop = False
     while not('structure' in locals()) or (reduced_structure and not(stop)):
         particles = particlesall[extract].copy()
         Rsph = Rsphall[extract]; Rsph/=np.median(Rsph)
@@ -237,7 +235,7 @@ def morphological_diagnostics(XYZ,mass,Vxyz,aperture=0.03,CoMvelocity=True,reduc
         eigval = eigval[[2-foo,1,foo]]
         # Compute change of basis matrix
         transform = linalg.inv(temp)
-        stop = (np.max((1-np.sqrt(eigval[:2]/eigval[2])/np.array([q,s]))**2)<(1e-10)**(1.-0.01*(counter/10))) or (eigval[1]<=2e-20);counter+=1
+        stop = (np.max((1-np.sqrt(eigval[:2]/eigval[2])/np.array([q,s]))**2)<1e-4)
         if (reduced_structure and not(stop)):
             q,s = np.sqrt(eigval[:2]/eigval[2])
             Rsphall = linalg.norm(np.matmul(transform,particlesall[:,:3,np.newaxis])[:,:,0]/np.array([q,s,1]),axis=1)
