@@ -58,7 +58,7 @@ def center_and_unloop(XYZ,XYZ0,BoxL=np.inf):
         that XYZ[:,0] = X, XYZ[:,1] = Y & XYZ[:,2] = Z
 
     """
-    XYZ_out = XYZ.copy(); Vxyz = Vxyz.copy()
+    XYZ_out = XYZ.copy()
     XYZ_out-=XYZ0
     if np.isfinite(BoxL):
         XYZ_out+=BoxL/2.
@@ -186,7 +186,7 @@ def morphological_diagnostics(XYZ,mass,Vxyz,aperture=0.03,CoMvelocity=True,reduc
     ellip : float
         The ellipticity parameter 1-c/a.
     triax : float
-        The triaxiality parameter (a²-b²)/(a²-c²).
+        The triaxiality parameter (a^2-b^2)/(a^2-c^2).
     Transform : array of dtype float, shape (3, 3)
         The orthogonal matrix representing the 3 axes as unit vectors: in real-world
         coordinates, Transform[0] = major, Transform[1] = inter, Transform[2] = minor. 
